@@ -1,0 +1,12 @@
+---
+title: "About"
+image: images/yeswath.jpg
+about:
+  template: jolla
+  links:
+    - icon: github
+      text: Github
+      href: https://github.com
+---
+
+I am Yeswanth Chitirala, currently pursuing a Master's in Advanced Data Analytics. My academic background includes a Bachelor's degree in Mechanical Engineering from RVR & JC College of Engineering in Guntur, India. Despite my initial choice of the mechanical stream, I have a strong affinity for physics and mathematics.Following my undergraduate studies, I accumulated four years of work experience in the field of ETL (Extract, Transform, Load) development. I spent three years at Infosys and an additional year at Deloitte as an ETL developer, primarily using the Informatica tool. My programming skills encompass C, Python, and Oracle SQL. In my professional journey, I specialized in data analytics, focusing on cleaning unprocessed data before its transformation. This hands-on experience with ETL processes led me to pursue the Advanced Data Analytics program, where I aim to further enhance my skills and knowledge in this field.

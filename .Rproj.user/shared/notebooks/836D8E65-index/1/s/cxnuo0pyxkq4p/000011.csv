@@ -1,0 +1,41 @@
+"0","# Load required libraries"
+"0","library(dplyr)"
+"0","library(ggplot2)"
+"0","library(caret)"
+"0","library(plotly)"
+"0","library(xgboost)"
+"2","
+Attaching package: ‘xgboost’
+
+"
+"2","The following object is masked from ‘package:plotly’:
+
+    slice
+
+"
+"2","The following object is masked from ‘package:dplyr’:
+
+    slice
+
+"
+"0","# Set seed for reproducibility"
+"0","set.seed(123)"
+"0",""
+"0","# Generate a random dataframe"
+"0","n <- 100"
+"0","random_df <- data.frame("
+"0","  X1 = rnorm(n),"
+"0","  X2 = rnorm(n),"
+"0","  X3 = rnorm(n)"
+"0",")"
+"0",""
+"0","# Add the Y column based on X1, X2, and X3"
+"0","random_df$Y <- 2 * random_df$X1 - 3 * random_df$X2 + 0.5 * random_df$X3 + rnorm(n)"
+"0",""
+"0","# Display the first few rows of the dataframe"
+"0","print(""Random Dataframe:"")"
+"1","[1]"
+"1"," ""Random Dataframe:"""
+"1","
+"
+"0","print(head(random_df))"

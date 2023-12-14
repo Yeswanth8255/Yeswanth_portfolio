@@ -1,0 +1,4 @@
+"0","# Interactive Visualization using plotly"
+"0","plot_ly(data = test_data, x = ~test_data$Y, y = ~predictions, type = 'scatter', mode = 'markers') %>%"
+"0","  add_trace(x = c(min(test_data$Y), max(test_data$Y)), y = c(min(test_data$Y), max(test_data$Y)), mode = 'lines', line = list(color = 'red', dash = 'dash')) %>%"
+"0","  layout(title = ""Interactive Predictions vs. Actual Values"", xaxis = list(title = ""Actual Values""), yaxis = list(title = ""Predictions""))"

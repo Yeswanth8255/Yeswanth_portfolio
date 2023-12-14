@@ -1,0 +1,17 @@
+---
+title: "Yeswanth Chitirala"
+image: images/yeswath.jpg
+about:
+  template: jolla
+  links:
+    - icon: github
+      text: Github
+      href: https://github.com
+    - icon: envelope
+      text: Contact me
+      href: mailto:Yeswanth.YeswanthChitirala@my.unt.edu
+---
+
+BIO
+
+This is Yeswanth Chitirala. Currently, I am pursuing Masters in Advanced Data Analytics course. I have completed my under graduation in Mechanical engineering from RVR & JC college of engineering, Guntur, India. As I am very keen on physics and mathematics, I have chosen mechanical stream in my under graduation. After my undergrad I worked in Infosys for three years and worked in Deloitte for one year as ETL developer. I have 4 years of work experience in ETL informatica tool. My background for programming languages is I have worked up on C Programming, python and Oracle SQL. Coming to usage of analytics in my professional career, I used to clean the unprocessed data before transforming the data. As this course work is an extension to my work experience in ETL, I have chosen ADTA program.

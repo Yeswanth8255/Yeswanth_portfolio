@@ -1,0 +1,7 @@
+"0","# Pairwise correlation heatmap"
+"0","print(""Pairwise Correlation Heatmap:"")"
+"1","[1]"
+"1"," ""Pairwise Correlation Heatmap:"""
+"1","
+"
+"0","heatmap(cor_matrix, col = colorRampPalette(c(""blue"", ""white"", ""red""))(50), symm = TRUE)"

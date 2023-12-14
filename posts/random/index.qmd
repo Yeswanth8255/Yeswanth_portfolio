@@ -1,0 +1,86 @@
+---
+title: "Exploring XGBoost: Predictive Modeling and Visualization"
+author: "Yeswanth Chitirala"
+date: "2024-01-14"
+categories: [news, code, analysis]
+image: "image.jpg"
+---
+
+## Introduction
+
+
+```{r}
+# Load required libraries
+library(dplyr)
+library(ggplot2)
+library(caret)
+library(plotly)
+library(xgboost)
+
+
+# Set seed for reproducibility
+set.seed(123)
+
+# Generate a random dataframe
+n <- 100
+random_df <- data.frame(
+  X1 = rnorm(n),
+  X2 = rnorm(n),
+  X3 = rnorm(n)
+)
+
+# Add the Y column based on X1, X2, and X3
+random_df$Y <- 2 * random_df$X1 - 3 * random_df$X2 + 0.5 * random_df$X3 + rnorm(n)
+
+# Display the first few rows of the dataframe
+print("Random Dataframe:")
+print(head(random_df))
+
+```
+
+## MODELLING 
+
+```{r}
+# Set seed for reproducibility
+set.seed(123)
+
+# Split the data into training and testing sets
+train_indices <- createDataPartition(random_df$Y, p = 0.8, list = FALSE)
+train_data <- random_df[train_indices, ]
+test_data <- random_df[-train_indices, ]
+
+# Create an XGBoost model
+xgb_model <- xgboost(data = as.matrix(train_data[, -4]), label = train_data$Y, nrounds = 100)
+
+# Make predictions on the test set
+predictions <- predict(xgb_model, as.matrix(test_data[, -4]))
+
+# Evaluate model performance
+accuracy <- sqrt(mean((predictions - test_data$Y)^2))
+
+# Display the accuracy
+print(paste("Model RMSE:", round(accuracy, 4)))
+```
+
+# VISUALIZATION 
+
+```{r}
+
+# Visualize actual vs. predicted values using plotly
+plot_data <- data.frame(Actual = test_data$Y, Predicted = predictions)
+
+plot <- plot_ly(plot_data, x = ~Actual, y = ~Predicted, type = 'scatter', mode = 'markers',
+                marker = list(color = 'blue', size = 8),
+                text = paste("Actual: ", test_data$Y, "<br>Predicted: ", round(predictions, 4)))
+
+layout <- list(title = "Actual vs. Predicted Values",
+               xaxis = list(title = "Actual Values"),
+               yaxis = list(title = "Predicted Values"))
+
+plot <- plot %>% layout(layout)
+
+# Display the interactive plot
+print(plot)
+```
+
+The root mean squared error (RMSE) of the XGBoost model is 1.6629. RMSE is a measure of the average deviation between the predicted and actual values, and in this context, a lower RMSE indicates better model performance. In other words, the model, on average, is making predictions that are approximately 1.6629 units away from the true values. While assessing model accuracy, it's crucial to consider the scale and context of the problem at hand. Comparing the RMSE to the range of the target variable can provide insights into the practical significance of the error. In this case, the model's performance appears reasonable, but further analysis and comparison with alternative models or baseline approaches may provide a more comprehensive understanding of its effectiveness.

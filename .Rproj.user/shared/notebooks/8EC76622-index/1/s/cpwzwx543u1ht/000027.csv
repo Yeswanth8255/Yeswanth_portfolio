@@ -1,0 +1,6 @@
+"0","for (i in 1:3) {"
+"0","  density_plot <- ggplot(random_df, aes(x = random_df[, i])) +"
+"0","    geom_density(fill = ""blue"", color = ""black"") +"
+"0","    labs(title = paste(""Density Plot for"", names(random_df)[i]))"
+"0","  print(density_plot)"
+"0","}"

@@ -1,0 +1,167 @@
+---
+title: "Linear regression analysis"
+author: "Yeswanth Chitirala"
+date: "2023-12-14"
+categories: [news, code, analysis]
+image: "image.jpg"
+---
+
+## Introduction
+
+This is a well curated data analysis using R and the linear regression machine learning model to predict factors affecting one variable from another and model accuracy in terms of that accuracy.
+
+```{r}
+# Load required libraries
+library(dplyr)
+library(ggplot2)
+library(caret)
+library(plotly)
+
+
+# Set seed for reproducibility
+set.seed(123)
+
+# Generate a random dataframe
+n <- 100
+random_df <- data.frame(
+  X1 = rnorm(n),
+  X2 = rnorm(n),
+  X3 = rnorm(n)
+)
+
+# Add the Y column based on X1, X2, and X3
+random_df$Y <- 2 * random_df$X1 - 3 * random_df$X2 + 0.5 * random_df$X3 + rnorm(n)
+
+# Display the first few rows of the dataframe
+print("Random Dataframe:")
+print(head(random_df))
+
+
+```
+
+# Descriptive statistics
+
+```{r}
+# Perform Descriptive Statistics
+print("Descriptive Statistics:")
+print(summary(random_df))
+
+```
+
+# Data visualization
+
+```{r}
+# Exploratory Data Analysis (EDA)
+# Scatterplot matrix
+print("Scatterplot Matrix:")
+pairs(random_df)
+
+# Correlation matrix
+print("Correlation Matrix:")
+cor_matrix <- cor(random_df)
+print(cor_matrix)
+
+# 3D Scatterplot
+print("3D Scatterplot:")
+scatterplot3d::scatterplot3d(
+  random_df$X1, random_df$X2, random_df$X3,
+  color = "blue",
+  main = "3D Scatterplot"
+)
+
+# Density Plots for each variable
+print("Density Plots:")
+par(mfrow = c(2, 2))
+for (i in 1:3) {
+  density_plot <- ggplot(random_df, aes(x = random_df[, i])) +
+    geom_density(fill = "blue", color = "black") +
+    labs(title = paste("Density Plot for", names(random_df)[i]))
+  print(density_plot)
+}
+par(mfrow = c(1, 1)) 
+```
+
+## Linear regression analysis
+
+```{r}
+# Linear Regression Machine Learning
+# Split data into training and testing sets
+set.seed(456)
+train_index <- createDataPartition(random_df$Y, p = 0.8, list = FALSE)
+train_data <- random_df[train_index, ]
+test_data <- random_df[-train_index, ]
+
+# Fit a linear regression model
+lm_model <- lm(Y ~ ., data = train_data)
+
+# Display the summary of the linear regression model
+print("Linear Regression Model Summary:")
+print(summary(lm_model))
+
+# Make predictions on the test set
+predictions <- predict(lm_model, newdata = test_data)
+
+# Evaluate the model
+print("Model Evaluation:")
+# Calculate various forms of accuracy metrics
+rmse <- sqrt(mean((predictions - test_data$Y)^2))
+mae <- mean(abs(predictions - test_data$Y))
+r_squared <- cor(predictions, test_data$Y)^2
+
+print(paste("Root Mean Squared Error (RMSE):", round(rmse, 3)))
+print(paste("Mean Absolute Error (MAE):", round(mae, 3)))
+print(paste("R-squared:", round(r_squared, 3)))
+# Additional Accuracy Metrics
+print("Additional Accuracy Metrics:")
+# Mean Squared Error (MSE)
+mse <- mean((predictions - test_data$Y)^2)
+# Mean Absolute Percentage Error (MAPE)
+mape <- mean(abs((test_data$Y - predictions) / test_data$Y)) * 100
+
+print(paste("Mean Squared Error (MSE):", round(mse, 3)))
+print(paste("Mean Absolute Percentage Error (MAPE):", round(mape, 3), "%"))
+
+```
+
+```{r}
+# Interactive Visualization using plotly
+plot_ly(data = test_data, x = ~test_data$Y, y = ~predictions, type = 'scatter', mode = 'markers') %>%
+  add_trace(x = c(min(test_data$Y), max(test_data$Y)), y = c(min(test_data$Y), max(test_data$Y)), mode = 'lines', line = list(color = 'red', dash = 'dash')) %>%
+  layout(title = "Interactive Predictions vs. Actual Values", xaxis = list(title = "Actual Values"), yaxis = list(title = "Predictions"))
+
+# Residual Analysis
+print("Residual Analysis:")
+residuals <- residuals(lm_model)
+qqnorm(residuals, main = "Normal Q-Q Plot of Residuals")
+qqline(residuals)
+plot(residuals, main = "Residuals vs. Fitted Values", xlab = "Fitted Values", ylab = "Residuals")
+abline(h = 0, col = "red", lty = 2)
+
+# Visualize the predictions vs. actual values using ggplot2 (with residuals)
+residual_data <- data.frame(Actual = test_data$Y, Predicted = predictions, Residual = residuals)
+
+ggplot(residual_data) +
+  geom_point(aes(x = Actual, y = Predicted), color = "blue") +
+  geom_abline(intercept = 0, slope = 1, linetype = "dashed", color = "red") +
+  labs(title = "Predictions vs. Actual Values with Residuals", x = "Actual Values", y = "Predictions") +
+  geom_segment(aes(x = Actual, y = Predicted, xend = Actual, yend = Residual), color = "gray", alpha = 0.5) +
+  theme_minimal()
+
+# Interactive 3D Visualization using plotly
+print("Interactive 3D Visualization:")
+plot_ly(
+  data = random_df,
+  x = ~X1, y = ~X2, z = ~X3,
+  type = 'scatter3d',
+  mode = 'markers',
+  marker = list(size = 5, color = 'blue')
+) %>%
+  layout(title = "Interactive 3D Scatterplot", scene = list(xaxis = list(title = "X1"), yaxis = list(title = "X2"), zaxis = list(title = "X3")))
+# Pairwise correlation heatmap
+print("Pairwise Correlation Heatmap:")
+heatmap(cor_matrix, col = colorRampPalette(c("blue", "white", "red"))(50), symm = TRUE)
+```
+
+## Conclusion
+
+The linear regression model exhibits strong performance as indicated by various metrics. The model captures a substantial portion of the variance in the data, with an R-squared value of 0.91, suggesting that approximately 91% of the variability in the response variable is explained by the predictors. The coefficients of the predictors (X1, X2, and X3) are statistically significant, and their estimated values align with the expected relationships. In terms of accuracy metrics, the model demonstrates a Root Mean Squared Error (RMSE) of 1.088, implying that, on average, predictions deviate by approximately 1.088 units from the actual values. The Mean Absolute Error (MAE) is 0.892, representing the average absolute difference between predicted and actual values. Additionally, the Mean Squared Error (MSE) is 1.184, providing another perspective on the model's predictive accuracy. It's noteworthy that the Residual Standard Error is 1.06, and the F-statistic is 277.1 with a very low p-value, indicating the overall significance of the model. These collectively suggest that the model fits the data well, and its predictions align closely with the observed values.

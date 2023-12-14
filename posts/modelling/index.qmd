@@ -1,0 +1,81 @@
+---
+title: "Support Vector Machine (SVM) model"
+author: "Yeswanth Chitirala"
+date: "2024-01-03"
+categories: [news, code, analysis]
+image: "image.jpg"
+---
+
+## Introduction
+
+In this R code, we are working towards the future goal of building and assessing a machine learning model, specifically a Support Vector Machine (SVM). The dataset, generated randomly, includes predictor variables (X1, X2, and X3) and a response variable (Y). Our objective is to predict Y based on the given predictors using an SVM algorithm. We will proceed by splitting the dataset into training and testing sets, allocating 80% for model training and reserving 20% for future evaluation. In the next steps, we will train the SVM model on the training data, aiming to capture underlying patterns for accurate predictions. Subsequently, we will utilize the trained model to make predictions on the test set. For a comprehensive assessment, we plan to evaluate the model's performance, calculating metrics such as accuracy and visualizing results through a confusion matrix and scatter plot. The intention is to gain insights into the model's predictive capabilities and potential areas for improvement in future iterations.
+
+```{r}
+# Load required libraries
+library(dplyr)
+library(ggplot2)
+library(caret)
+library(plotly)
+library(e1071) 
+
+# Set seed for reproducibility
+set.seed(123)
+
+# Generate a random dataframe
+n <- 100
+random_df <- data.frame(
+  X1 = rnorm(n),
+  X2 = rnorm(n),
+  X3 = rnorm(n)
+)
+
+# Add the Y column based on X1, X2, and X3
+random_df$Y <- 2 * random_df$X1 - 3 * random_df$X2 + 0.5 * random_df$X3 + rnorm(n)
+
+# Display the first few rows of the dataframe
+print("Random Dataframe:")
+print(head(random_df))
+```
+## Modelling 
+
+```{r}
+# Split the data into training and testing sets
+trainIndex <- createDataPartition(random_df$Y, p = 0.8, list = FALSE)
+train_data <- random_df[trainIndex, ]
+test_data <- random_df[-trainIndex, ]
+
+# Train a Support Vector Machine (SVM) model
+svm_model <- svm(Y ~ ., data = train_data)
+
+# Make predictions on the test set
+predictions <- predict(svm_model, newdata = test_data)
+
+# Evaluate the model
+conf_matrix <- table(Actual = test_data$Y, Predicted = predictions)
+accuracy <- sum(diag(conf_matrix)) / sum(conf_matrix)
+
+# Print detailed accuracy metrics
+print("Confusion Matrix:")
+print(conf_matrix)
+print(paste("Accuracy:", round(accuracy, 4)))
+
+# Visualize the confusion matrix
+plot_conf_matrix <- plot_ly(
+  x = rownames(conf_matrix),
+  y = colnames(conf_matrix),
+  z = as.matrix(conf_matrix),
+  type = "heatmap",
+  colorscale = "Viridis",
+  showscale = TRUE
+) %>%
+  layout(title = "Confusion Matrix",
+         xaxis = list(title = "Predicted"),
+         yaxis = list(title = "Actual"))
+
+# Print the confusion matrix plot
+print(plot_conf_matrix)
+
+```
+# RESULTS
+
+The output "Accuracy: 0.25" suggests that the Support Vector Machine (SVM) model applied to the features X1, X2, ZND, and X3 has an accuracy of 25%. This means that the model's predictions align with the actual outcomes only 25% of the time. Such a low accuracy score indicates that the model might not be performing well on the given data or that there may be room for improvement in the model's configuration, feature selection, or data preprocessing steps. Further analysis and potential adjustments to the model are recommended to enhance its predictive performance.

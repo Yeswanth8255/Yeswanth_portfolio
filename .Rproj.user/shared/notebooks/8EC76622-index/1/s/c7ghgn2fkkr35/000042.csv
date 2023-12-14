@@ -1,0 +1,1 @@
+"0","plot(residuals, main = ""Residuals vs. Fitted Values"", xlab = ""Fitted Values"", ylab = ""Residuals"")"

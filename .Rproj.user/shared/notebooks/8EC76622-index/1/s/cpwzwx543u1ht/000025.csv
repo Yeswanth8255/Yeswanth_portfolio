@@ -1,0 +1,8 @@
+"0",""
+"0","# Density Plots for each variable"
+"0","print(""Density Plots:"")"
+"1","[1]"
+"1"," ""Density Plots:"""
+"1","
+"
+"0","par(mfrow = c(2, 2))"
